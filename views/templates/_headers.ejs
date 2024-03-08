@@ -1,0 +1,64 @@
+<!-- header section -->
+<header id="nav">
+  <div class="nav">
+    <div class="navleft">
+      <div class="navlogo">
+        <a href="/">
+          <h2>Task Manager</h2>
+        </a>
+      </div>
+    </div>
+    <div class="navright">
+      <div class="navlist">
+        <ul>
+          <% if(!loggedin){%>
+          <li class="navitem">
+            <a href="/login" class="navlink"
+              ><img
+                src="https://img.icons8.com/fluency-systems-regular/48/settings--v1.png"
+                alt="settings--v1"
+            /></a>
+          </li>
+          <li class="navitem">
+            <a href="/login" class="navlink"
+              ><img
+                src="https://img.icons8.com/ios/50/laptop-metrics--v2.png"
+                alt="laptop-metrics--v2"
+            /></a>
+          </li>
+          <li class="navitem">
+            <a href="/login" class="navlink"
+              ><img
+                src="https://img.icons8.com/windows/32/000000/user-male-circle.png"
+                alt="user-male-circle"
+            /></a>
+          </li>
+          <% }else {%>
+          <li class="navitem">
+            <a href="/" class="navlink"
+              ><img
+                src="https://img.icons8.com/fluency-systems-regular/48/settings--v1.png"
+                alt="settings--v1"
+            /></a>
+          </li>
+          <li class="navitem">
+            <a href="/dashboard" class="navlink"
+              ><img
+                src="https://img.icons8.com/ios/50/laptop-metrics--v2.png"
+                alt="laptop-metrics--v2"
+            /></a>
+          </li>
+          <li class="navitem">
+            <a href="/profile" class="navlink"
+              ><img
+                src="https://img.icons8.com/windows/32/000000/user-male-circle.png"
+                alt="user-male-circle"
+            /></a>
+          </li>
+          <%}%>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- end header section -->

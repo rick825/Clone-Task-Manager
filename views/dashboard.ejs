@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager: Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dash.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+
+<body>
+    <!-- nav section -->
+    <%-include('templates/_sidenav.ejs')%>
+        <!-- end nav section -->
+
+        <!-- maindash section -->
+        <section id="maindash">
+            <div class="maindash">
+                <h2>Hello, <%= user.fname%>
+                        <%= user.lname%>
+                </h2>
+
+                <!-- dashboard section -->
+                <section id="dash">
+                    <div class="dash">
+                        <div class="leftdash dashdiv">
+                            <div class="leftdashtop dashsec">
+                                <div class="dashc dashadd">
+                                    <button onclick="showAddCategoryModal();" class="add-category"
+                                        id="add-category"><span>+</span>Add Category</button>
+                                    <button onclick="showAddTaskModal();" class="add-task"
+                                        id="add-task"><span>+</span>Add Task</button>
+                                </div>
+                                <hr>
+                                <div class="dashc dashright">
+                                    <div class="dashcm dashcm1">
+                                        <div class="dashcmimg">
+                                            <img
+                                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAACyUlEQVR4nO3aMWtTURTA8YeKWnNuWxHsoOAkqIMgIk7SSXCRtklOFSkE1N6TWASd3KyDi7NQcHFw8Qu4iB9AQTcXB0XERUUFHVS0qKRNS19Sa0lp7qHv/4M39TX3ck9eU8I/ywAAAAAAQAGNDNQGU+8BLZVS43BV4heVeI1DSezcQGNnVeylBvszd0m8p9nVvtT7KqTpbHqTij1YHEbrGg/xdOq9FZIGu9E+DJV4O/W+Ckn77aQGm106jKrEx5rp1tR7K5zy4KV9KvFjbhjB3mmf7Um9t8KpZbXtKvFZ/k9V/KUyOZx6b4WkYnfbPzeqIV5Jva9CUomNjg/xEO+n3teGM5xNb/nfPZUQj2uIP9qejOcTQxOlbtbUjsFujKurAeQORiaHVeKLssQD/7pnrFTfrcHe5v+9ta9npHGw63VD+sNzNxAVO1SV+Ll1wJ8qUj/RcU+mm1XsYdvCvysSy2taO6Q/PFcDmXvXi73Jv2D8Ni5xNH9w8VbnwvHmWobRlPrg3A1k7p0fbGaZF53VUpxq3lMRG2k+DUt/Xg32qPm7XS+MlanY9fZDb113mp8TuWFIfD0apnZxputMQ6xVg/1c6VGsBvuuA42j670XLP1uqu2JyF/18xxWj433Tx7TEN8vM5CZXu8FLeVg+1Xiq8VhiD05lV3exgEldLZ0YUjFnmqwD2N9F/em3Ataml+JVHbUj3AgAAAAwCLaXkdoex2h7XWEttcZ2l5HaHsdoe11hLbXGdpeR2h7e4S219KHcgtoe81HuTg/DNpe9TIQ2l6j7cUq0PY6RNvrEG2vQ7S9DtH2OkTb6xBtLwAAANCBttcR2l5HaHsdoe11hrbXEdpeR2h7HaHtdYa21xHa3h6h7bX05eIC2l7zkZLOD4O2V70MhLbXaHuxCrS9DtH2OkTb6xBtr0O0vQ7R9jpE2wsAAAAAAABkhfYXx/tyXTcw54MAAAAASUVORK5CYII=">
+                                        </div>
+                                        <div class="dashcmtext">
+                                            <h2>Total Task</h2>
+                                            <h3><%= taskArray[0].tasksLength %> </h3>
+                                        </div>
+                                    </div>
+                                    <div class="dashcm dashcm2">
+                                        <div class="dashcmimg">
+                                            <img
+                                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFfklEQVR4nO2dTYgcRRTHKyprZqdqhl0NQaMiHhQVP1BQRFAQwY+DEqfeTDTRYHb3vRnNCoIgIrKIF8GDKIjgQfAiesnHwcRATh5MJOiKKIsIgp/RaDSoUaLGlZqMMtPTOzvT01Xzuuf9oC9Jpvv/6jdV1enu6lFKEARBEHIATM5eDRp3W0PfgaFln9upY+Cu6iRdNeq6Gcug475FdInR9JtIiROicXdoGW29ZWf4ryBzQgxTsOKG36usc7uaPxMMPgKaDrpun3YjKc/4GPpcW0CJtoOCCd/5O4sp0AZr8EOf31rluwa/vW7RtZEK1TN8y4DsC1kGjR8E6SnNYcp3MSYHQtxWxIdDnA29135Qq/GtNLrnqIWoIdlYmD0PNO2JtM0B5RvQ+Gv7QV2QVPabcSGO2trG+Z3DFv2ifOOr4fIgZBR15KYQyEkdqx5w3CZ1NWD7eC8kVKFpI0JEiB+kh1C2h6xsXFykb0ddf2J8BXI3i2BkQnDHqOtPjK9A7iaR9XDVeLXNHbNSbFw56voT4zNQ1UkxtBMMHg7QKw67njGIDN/1J4JdoMCwq59doMCwq59doMCwq59doMCwq59doMCwq59doMCwq59doMCwq59doMCwq59doMCwq59doMCwq59doJSomLk7wODXoOkoaLKZqZ9doBS4p9y4yD0h0pb7SGbqZxdoSBbUwmlg8J1+74+wq59doCEBQ49FM4OmuczUzy7QEICmy6yhPyIy9iml1mSmfnaBEnKzWjgDNB2KyPh5tScx2dXPLlBCwNAzXUNVEWuZq59doARAuXGtNfRne06r8fVM1s8u0IBsVVvXgqGPO2QY/AZKM9OZrJ9doAEBTS9GMv5TNXRnZutnF2gAoFi/xQno7B30cqbrZxeoT2AKy6Dpi8hZ1ed3nbXNZLp+doH6BDS+Fpk3TlY13pT5+tkF6oOKprujuayhZ1Ue6mcXaBXu1Xh293PD+Ik721J5qD/NQBsn8RzXYH7z4o5IphPuvSrJ95dTIVbTE24cbzaQpid9ZLWGHojmGfZYuRUCBn+PDCMvuUvhaeVsrojVdKxj3tB4wF3DGma/ORZCS13fXkNvpPT2gzVgaH+kZxyvmdmLh91xboVUy3gNaPwxZkjZB+se0sNktCWc79pvibarFMitEEdNNy61Br+MkXII9IPrkuWrXxLzIrT9ve5xDLb/HAtxbCpsOxcMfRQzfC25eSDBPY6DEbnHYAovUCmReyHNz5RmpkHTu9HPNq/CFvGKvrNpfKpbbP3+QWtU4y7EsWX9lqLV+HbM8HUUDN7Q1zsb3Sl055nbriQ19jzOuAhpflbBhDX4ZuyLKkv123q/3a5r2DuyqTizPmmdK2YcJyEOUHC6uyQeM6ecWOkWq9X4XPTfV3W9ojwwdkL+AzQ+HiPlb9BY7zh91nRj8887h7lXlSfGVojDvZGtdXkl9kqtm3dA42eRv//qvnJjSnlirIU4bIk2Rx9IaM0rL1iDr3SKwpPurqDyyNgLcVSLc7dG32QXu2l6XnlGhLSAEl1nDf3QQ8gSqEcLyjMiJPLop5sjumXgXxWD16sAiJAItTJdaDV9GhHytAqECInB/YfPano/6AuLW4iQFdg8PV8CTXsrxdnLVUBECDNECDNECDNECDNECDNECDNECDNECDNECDNECDNECDNECDNECDNECDNECDMyLyTvmxIhNHIJIsSMvuFFiBl9Y+dCyLgDImTchXj6ceI8UIv8OLHV+JP3g8as4dsz6FrAPFI7tS5+b/Cf745dcizbcmwbpLQUuyet5WOLIoF6fxFDPlEJBdogUqiXkEW33DuIjP+lKJhwXbK5nLmftRs536z7UUw3v7o2CfissSAIgiCoFv8CgsX9dvJ2S5EAAAAASUVORK5CYII=">
+                                        </div>
+                                        <div class="dashcmtext">
+                                            <h2>Task Completed</h2>
+                                            <h3><%= taskArray[0].taskCompletedLength %></h3>
+                                        </div>
+                                    </div>
+                                    <div class="dashcm dashcm3">
+                                        <div class="dashcmimg">
+                                            <img
+                                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEaUlEQVR4nO2dy4oTQRSGC7zOWBVRN+Jl4wOob+BOXXrpM4pLlVOOMyrixp0P4AvoE7gQr6AuBRUvII4XcCG4ceEFQcULiggjJ8KYZCZOElOn/uqqH2oxTNL9//X1qep0Kt3GFBUVJSIaPbiZLF+pnH9Lzk+HbH/2wZfHRv2m2LmBYfhvoUHMAmP91wJlLiCWr2jDaKmWS/qHILg0hinq2vidSV3bzZEl5PgoWX9fyn7YnWQCK8TQJ31BDT9JhhaH9t8eZsSvrRw/DnnUmtAZwlbdlPSR0aqM0DAofSDTZPmRSqU0h6nQYVwNgEhbxhMaZ0MPWndaWb42jPKMDcT8p3aOHFxH1l/v6Jt7JrTI8pfWnYqRoWw3cSCiPUvH17cPW/6zCa1QHVcHIDFy1CYI1STHvDvMbVI3ffZP8CBaQYetAqQACaNSIT7tISuNi4v+dez8AyuUIfmyiKIB4Yux8w+sUIbkS6IqwFXj+Zrsc/ey8Y2x8w+skIbGBIrzl8jxG4WqeCOV0Q+M0PkHEpwhZcHlhzOkLLj8cIaUBZcfzpCy4PLDGVIWXH44Q8qCyw9nSFlw+eEMKQsuP5whZcHlhzOkLLj8cIaUBZcfzpCy4PLDGepRW8yphWSZyfEtsv5j5fx7WTcli9lkNWay+eEM9aC9I/vXVI7vdHqbaZYfypqqJPPDGZpHsqqSLL/oCmOm8RMyx0eSyw9naCgwZtqx5PLDGeoiGj28unL8vA8YUiU3k8sPZ6iPyqgcP/snEOs/JZcfzlDvlXGBDS+qHJ/4n9UncPnhDPU2ZzRhzLzO8skuQG6b1PLDGeoThkj+JuefzjFkHTCp5YczZOYfptpea2gBOT43V3XI/5LLj2aI+q+MC7Mrg1/0+iswtPxQhmgYldEHDLT8UIYoAgyk/FCGKBIMlPxQhigijOY2CxAcGM3tFiA4MJrbLkAMDIwCxGDByB4IgcHIGggBwsgWCIHCyBIIAcPIDgiBw8gKiCzVIcWrtoMqGyCV9VfRYWQDZN/y8RXk/C/UYSo7IGR91fqeyvFztMrIC4jzZ9uAWD6NVhl5AbH8svU9uxu8FRFGFkB2LR/f0D5c+e873MSqscahbVIpc54GR4KRBZDKet8B5Cc5/jELAgCMLICQ4/NdO99hwcgEiH/dA4xf8jlFPjyayKo/kI4Jnf5Ww0tyfKZ5Stw4sNKAqPZAmpO341fyEzNyfF7mFJnoDahqDyQ1EVp+OEPKgssPZ0hZcPnhDCkLLj+cIWXB5YczpCy4/HCGlAWXH86QsuDywxlSFlx+OEPKgssPZ0hZcPnhDCkLLn+/hureTAHio0MoQFz8ji9AXPzOrgWQ3EUFSO5AAj2cuA7a0/Fw4sryh+A7Jevvtx0F1l/v9Y6etYdh/Q31x3dXDT4SeyKlVFrDTwYHIjcdJuenood14M3yIzK02GioeY+qAmX6H0Cm1Bf1CX0pSbL+budEn2Or5KGYMr9Kn2hVRlFRUVFRUVFRkelNvwHIVSGnM59pDAAAAABJRU5ErkJggg==">
+                                        </div>
+                                        <div class="dashcmtext">
+                                            <h2>Task Left</h2>
+                                            <h3><%= taskArray[0].taskInCompletedLength %></h3>
+                                        </div>
+                                    </div>
+                                    <div class="dashcm dashcm4">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="leftdashbot dashsec">
+                                <div class="ldbt ">
+                                    <div class="task-list">
+
+                                        <!-- Iterate over all categories -->
+                                        <% tasksByCategory.forEach(categoryWithTasks=> { %>
+                                            <div class="task-cate">
+                                                <div class="task-cate-head">
+                                                    <h2>
+                                                        <%= categoryWithTasks.category.name %>
+                                                    </h2>
+                                                    <a href="/api/deletecategory/<%= categoryWithTasks.category._id %>" onclick="deleteCategory(`<%= categoryWithTasks.category._id %>`);"><img
+                                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA/ElEQVR4nO2VSw4BQRBAO2Fh0SUcABchDuCXGEXCvmpYk7Cy4wScgBNwAk7ACbiBJZEgE2uJ6hokeEnvevrl9XRSxvx5Es9yBcEvm3eDwCcEOr7ocL8cHI7AV9miYx2o5FKzlsservWHxLQSl/8WaPmgvmbLB7kYeBvC/924FC/1xbRwKZ6GUDwRi2uWByEU9+XiOLfU4jg1xWLP+rkQirNiMSYprRU3Yu2UXGwwgkBnxcM6580wKhYHoOW94pp3xhVUDQvFcEDLc0XxTFM8VhSPnMU1yx1FcdtZ7IFfVBQXnMXVRCeDwBcH8SX41mhAoJ5oNt/3dlXSP1/BDR7qVoPiT+1GAAAAAElFTkSuQmCC"></a>
+                                                </div>
+                                                <div class="task-cate-cont">
+                                                    <div class="task-cate-cont-top taskcont">
+                                                        <div class="mytaskhead">
+                                                            <!-- <h2>To Do</h2> -->
+                                                        </div>
+                                                        <div class="mytasklist">
+                                                            <table>
+                                                                <thead>
+                                                                    <tr class="mytask">
+                                                                        <th class="tasktitle">Name</th>
+                                                                        <th class="dueon">Due On</th>
+                                                                        <th class="taskbtn">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <!-- my task  -->
+                                                                    <% if (categoryWithTasks.tasks &&
+                                                                        categoryWithTasks.tasks.length> 0) { %>
+                                                                        <% categoryWithTasks.tasks.forEach(task=> { %>
+                                                                            <tr class="mytask">
+                                                                                <td class="tasktitle">
+                                                                                    <input type="checkbox"
+                                                                                        class="todo-checkbox"
+                                                                                        id="<%= task._id %>"
+                                                                                        name="<%= task._id %>"   <%= task.completed ? 'checked' : '' %>/>
+                                                                                    <label for="<%= task._id %>" onclick="markCompleted('<%= task._id %>')"><span>
+                                                                                            <%= task.title %>
+                                                                                        </span></label>
+                                                                                </td>
+                                                                                <td class="dueon">
+                                                                                    <b style="margin-left: 1rem;">
+                                                                                        <%= task.date %>
+                                                                                    </b>
+                                                                                </td>
+                                                                                <td class="taskbtn">
+                                                                                    <a 
+                                                                                        onclick="showEditTaskModal('<%= task._id %>',{name: '<%= task.title %>', date: '<%= task.date %>', category: '<%= task.categories %>'})"><img
+                                                                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACKElEQVR4nO3ZO28TQRAA4AkvIXnGASFEFQoU3i09bSoQzo7cRAShaAa75QeYCkrEL6GjQiAl8W9IGiqeVYooLQGtcw4X2+Hsu9uHpR1pJd+t97Sfd250ewZIkWLmeAi9cwalx6Q7jLpvSLa5KSswTyEg5w3peyb9k2+G5PdcYZj02SjiuKH2YQ5iYfiBUd9OghjUA4g51q6tNZj0IzekPTzHpG/GV0R2Idbgq11k0q1sol8Y+MJpK2NIXkL0CNKv3Owuj30nwwwKAPBZiBsh30YRJ1aGZN1Ws8kXQu2fWh3ctVdTIZrd5UGaoT4p/kUiQbRIb44hbJodpdOnfDX7LwS8Vyf5nCF+trFzN99vUYMVOrqxtx9deU6FF/UNcYLwDXGG8AlxivAFcY7wAckjDOkvJwjXkFEEo96bBsFZiY4CUgXBZebjAlIWUWk+dUOqIKKBFCHatHGr6Mbm0JBpEIbke1F14pCQuhBBIXUigkHqRgSBuECEgCwwyWY29kcL5U6+0x7b81n/lt1EOZ4PlBrYWuzcyMYdrjblQV0I7xCDwsdbV9T+v8eLF7fLpFMwCJO8PrEPR+3blamK8A9B/TDhpcJh2XQKl1q2Sk1+Q1IJ4RXCl+X6IH1Q9mwKGdR3hvTpamPjfg96Z2aeQMX5lB74eHH9UvtiZwkcBYd+aKwrOEEorYiT4JRalFLLSXBKLUqpFWdqcWQNSkCGfwtH1GRzZkgKiCP+ArpRdUiuX8ONAAAAAElFTkSuQmCC"></a>
+                                                                                    <a href="/api/deletetask/<%= task._id %>"><img
+                                                                                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA/ElEQVR4nO2VSw4BQRBAO2Fh0SUcABchDuCXGEXCvmpYk7Cy4wScgBNwAk7ACbiBJZEgE2uJ6hokeEnvevrl9XRSxvx5Es9yBcEvm3eDwCcEOr7ocL8cHI7AV9miYx2o5FKzlsservWHxLQSl/8WaPmgvmbLB7kYeBvC/924FC/1xbRwKZ6GUDwRi2uWByEU9+XiOLfU4jg1xWLP+rkQirNiMSYprRU3Yu2UXGwwgkBnxcM6580wKhYHoOW94pp3xhVUDQvFcEDLc0XxTFM8VhSPnMU1yx1FcdtZ7IFfVBQXnMXVRCeDwBcH8SX41mhAoJ5oNt/3dlXSP1/BDR7qVoPiT+1GAAAAAElFTkSuQmCC"></a>
+                                                                                </td>
+                                                                           </tr>
+                                                                         <% }); %>
+                                                                          <% } else { %>
+                                                                            <tr class="mytask">
+                                                                            <td colspan="3">
+                                                                             <p>No Task Available</p>
+                                                                             </td>
+                                                                            </tr>
+                                                                        <% } %>
+                                                                     <!-- end my task -->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                        <div class="mytaskbutton">
+                                                            <a href="#">See All Tasks</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="task-cate-cont-bot taskcont">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% }); %>
+                                                <!-- end task -->
+
+                                    </div>
+                                </div>
+                                <!-- add task modal -->
+                                <div class="add-task-modal modal" id="add-task-modal">
+                                    <div class="modal-head">
+                                        <h2>Add Task</h2>
+                                        <button onclick="closemodal();"><img
+                                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACaklEQVR4nO2ZwW7UMBCG7Sv27A0h3gGeAg6IAhc8aUFli0o7E5UHgVPLDXgkaFmeBZCgPbWaZNMmsOw68WxCUX4pp7U9/7dx7PiPMaNGjfrvZdHRa/Q0Q08/0PNx8LSnXQQ976Onk7IGzYLnA6mdOq5F4I8IfP7H5flIx7qx6OndwhpAH1IgaubpJzrafHSbbiDQDgKdKkHYK/N0GoCnUiO4fKuomQDRMP/U0b36jwi0oQDRMC9j1n/M3P79zhDFnP+LeSWIpeYXQnjKTawQ+GvRydHm8nadIKy0XWW+Ujmd+Dx4/mJihZ6/S6ftW9tuZdt2EK3Mi/DmgS8B6JuJVbGcSSfgaVT7OIjW5kXlolHcgc8mVuj5VVUoA36oANHV/MblmMAvowHmEEdKEMnmg6fDVuY1IQYzXwmB38xv4RlC/sRECCf0IAD/qu2q3fp6pd0+EWJY8ynTKXP5Hbl6nzaad2Lwf37dENineW0IHMK8FsSg5is11nhHd02kpK3imaKzGjts7GrzzwAE4LfKU8ia62J+UIigZH4QiKBsvk8I2+nNVB7WyNUJdYKClbnNWQb0uMeXOTu0eY3XaatgfrgDDXadThrmr8bqGQIlaNU91KdDQL4bDSAh0rzTCw3zKRABeNolVllXsGX6CrZmRSeXb63jGNgGAif8bJ6NnkQDyMeFNuFulzNsDETWDHepzfhWIu2YeD3lAI5LIOrmA/D7LuM3IGQ6yTMhEZ9meoBNiJ2ixoSe/2Y+5StNBdG8NKOP4OlwYY1E8/UdOZeHSFYC9PSpddAaIYR8V5bKsgYft53zo0aNMtdTF5W0x2N02UuGAAAAAElFTkSuQmCC"></button>
+                                    </div>
+                                    <form action="/api/addtask/<%= user._id %>" method="POST" class="form">
+                                        <label for="name">Name:</label>
+                                        <input type="text" name="name" id="name" placeholder="Enter Task Name" required>
+                                        <br>
+                                        <label for="date">Due Date:</label>
+                                        <input type="date" name="date" placeholder="Enter The Date"
+                                            style="cursor: pointer;">
+                                        <br>
+
+                                        <label for="category">Category:</label>
+                                        <select id="addcategory" name="category" required>
+                                            <% tasksByCategory.forEach(cate=>{%>
+                                                <option value="<%= cate.category._id %>">
+                                                    <%= cate.category.name %>
+                                                </option>
+                                                <% }); %>
+                                        </select>
+
+                                        <p onclick="showAddCategoryModal();" class="add-new-category-bt"><span>+</span>
+                                            Add New Category</p>
+                                        <br>
+                                        <button type="submit">Add Task</button>
+                                    </form>
+                                </div>
+
+                                <!-- add category modal -->
+                                <div class="add-category-modal modal" id="add-category-modal">
+                                    <div class="modal-head">
+                                        <h2>Add Category</h2>
+                                        <button onclick="closemodal();"><img
+                                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACaklEQVR4nO2ZwW7UMBCG7Sv27A0h3gGeAg6IAhc8aUFli0o7E5UHgVPLDXgkaFmeBZCgPbWaZNMmsOw68WxCUX4pp7U9/7dx7PiPMaNGjfrvZdHRa/Q0Q08/0PNx8LSnXQQ976Onk7IGzYLnA6mdOq5F4I8IfP7H5flIx7qx6OndwhpAH1IgaubpJzrafHSbbiDQDgKdKkHYK/N0GoCnUiO4fKuomQDRMP/U0b36jwi0oQDRMC9j1n/M3P79zhDFnP+LeSWIpeYXQnjKTawQ+GvRydHm8nadIKy0XWW+Ujmd+Dx4/mJihZ6/S6ftW9tuZdt2EK3Mi/DmgS8B6JuJVbGcSSfgaVT7OIjW5kXlolHcgc8mVuj5VVUoA36oANHV/MblmMAvowHmEEdKEMnmg6fDVuY1IQYzXwmB38xv4RlC/sRECCf0IAD/qu2q3fp6pd0+EWJY8ynTKXP5Hbl6nzaad2Lwf37dENineW0IHMK8FsSg5is11nhHd02kpK3imaKzGjts7GrzzwAE4LfKU8ia62J+UIigZH4QiKBsvk8I2+nNVB7WyNUJdYKClbnNWQb0uMeXOTu0eY3XaatgfrgDDXadThrmr8bqGQIlaNU91KdDQL4bDSAh0rzTCw3zKRABeNolVllXsGX6CrZmRSeXb63jGNgGAif8bJ6NnkQDyMeFNuFulzNsDETWDHepzfhWIu2YeD3lAI5LIOrmA/D7LuM3IGQ6yTMhEZ9meoBNiJ2ixoSe/2Y+5StNBdG8NKOP4OlwYY1E8/UdOZeHSFYC9PSpddAaIYR8V5bKsgYft53zo0aNMtdTF5W0x2N02UuGAAAAAElFTkSuQmCC"></button>
+                                    </div>
+                                    <form action="/api/addcategory/<%= user._id %>" method="POST" class="form">
+                                        <label for="name">Category:</label>
+                                        <input type="text" name="name" id="name" placeholder="Enter Category Name"
+                                            required>
+                                        <br>
+                                        <p onclick="showAddTaskModal();" class="add-new-category-bt"><span>+</span> Add
+                                            New Task</p>
+                                        <br>
+                                        <button type="submit">Add Category</button>
+                                    </form>
+                                </div>
+
+                                <!-- add Edit Task modal -->
+                                <div class="edit-task-modal modal" id="edit-task-modal">
+                                    <div class="modal-head">
+                                        <h2>Edit Task</h2>
+                                        <button onclick="closemodal();"><img
+                                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACaklEQVR4nO2ZwW7UMBCG7Sv27A0h3gGeAg6IAhc8aUFli0o7E5UHgVPLDXgkaFmeBZCgPbWaZNMmsOw68WxCUX4pp7U9/7dx7PiPMaNGjfrvZdHRa/Q0Q08/0PNx8LSnXQQ976Onk7IGzYLnA6mdOq5F4I8IfP7H5flIx7qx6OndwhpAH1IgaubpJzrafHSbbiDQDgKdKkHYK/N0GoCnUiO4fKuomQDRMP/U0b36jwi0oQDRMC9j1n/M3P79zhDFnP+LeSWIpeYXQnjKTawQ+GvRydHm8nadIKy0XWW+Ujmd+Dx4/mJihZ6/S6ftW9tuZdt2EK3Mi/DmgS8B6JuJVbGcSSfgaVT7OIjW5kXlolHcgc8mVuj5VVUoA36oANHV/MblmMAvowHmEEdKEMnmg6fDVuY1IQYzXwmB38xv4RlC/sRECCf0IAD/qu2q3fp6pd0+EWJY8ynTKXP5Hbl6nzaad2Lwf37dENineW0IHMK8FsSg5is11nhHd02kpK3imaKzGjts7GrzzwAE4LfKU8ia62J+UIigZH4QiKBsvk8I2+nNVB7WyNUJdYKClbnNWQb0uMeXOTu0eY3XaatgfrgDDXadThrmr8bqGQIlaNU91KdDQL4bDSAh0rzTCw3zKRABeNolVllXsGX6CrZmRSeXb63jGNgGAif8bJ6NnkQDyMeFNuFulzNsDETWDHepzfhWIu2YeD3lAI5LIOrmA/D7LuM3IGQ6yTMhEZ9meoBNiJ2ixoSe/2Y+5StNBdG8NKOP4OlwYY1E8/UdOZeHSFYC9PSpddAaIYR8V5bKsgYft53zo0aNMtdTF5W0x2N02UuGAAAAAElFTkSuQmCC"></button>
+                                    </div>
+                                    <form  method="POST" class="form" id="edit-task-form">
+                                        <label for="name">Name:</label>
+                                        <input type="text" name="name" id="editname"  >
+                                       
+                                        <br>
+                                        <label for="date">Due Date:</label>
+                                        <input type="date" name="date" id="editdate"  style="cursor: pointer;" >
+                                        <br>
+
+                                        <label for="category">Category:</label>
+
+                                        <select id="editcategory" name="category" >
+                                            <% tasksByCategory.forEach(cate => { %>
+                                                <option value="<%= cate.category._id %>" >
+                                                    <%= cate.category.name %>
+                                                </option>
+                                            <% }); %>
+                                        </select>
+
+                                        <p onclick="showAddCategoryModal();" class="add-new-category-bt"><span>+</span>
+                                            Add New Category</p>
+                                        <br>
+                                        <button type="submit">Edit Task</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <div class="rightdash dashdiv">
+                                <div class="rightdashtop dashsec">
+
+                                </div>
+                                <div class="rightdashbot dashsec">
+
+                                </div>
+                            </div>
+                        </div>
+                </section>
+                <!-- end dashboard section -->
+
+            </div>
+        </section>
+        <!-- end maindash section  -->
+
+        <script src="/js/script.js"></script>
+
+</body>
+
+</html>
